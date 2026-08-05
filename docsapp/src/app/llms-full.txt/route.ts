@@ -1,5 +1,6 @@
+import { getLLMText } from '@/lib/getLlmText'
 import { getAuthSession } from '@/lib/session'
-import { getLLMText, publicSource, source } from '@/lib/source'
+import { publicSource, source } from '@/lib/source'
 
 export const revalidate = false
 

@@ -4,7 +4,7 @@ export const appDescription = process.env.APP_DESCRIPTION || 'Documentation webs
 
 export const docsRoute = '/docs'
 export const docsImageRoute = '/og/docs'
-export const docsContentRoute = '/llms.mdx/docs'
+export const docsLlmsMdxRoute = '/llms.mdx'
 
 // fill this with your actual GitHub info, for example:
 export const gitConfig = {
@@ -16,4 +16,4 @@ export const gitConfig = {
 export const baseUrl =
   process.env.NODE_ENV === 'development' || !process.env.BASE_URL
     ? new URL('http://localhost:3000')
-    : new URL(`https://${process.env.BASE_URL}`)
+    : new URL(`https://${process.env.ROOT_DOMAIN}`)

@@ -26,6 +26,7 @@ const config = {
     // standalone build for docker production
     output: 'standalone',
   }),
+  serverExternalPackages: ['@takumi-rs/core'],
   images: {
     remotePatterns: [
       {
