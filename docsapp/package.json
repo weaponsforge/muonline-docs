@@ -1,6 +1,6 @@
 {
   "name": "fumadocs-template",
-  "version": "1.1.6",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "build": "next build",
@@ -22,7 +22,8 @@
     "next-auth": "^4.24.15",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.6.0",
+    "takumi-js": "^2.5.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",

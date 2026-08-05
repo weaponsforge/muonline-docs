@@ -8,11 +8,14 @@ import {
   MarkdownCopyButton,
 } from 'fumadocs-ui/layouts/docs/page'
 import { createRelativeLink } from 'fumadocs-ui/mdx'
+import { DocsPageProps } from 'fumadocs-ui/page'
 
 import { getMDXComponents } from '@/components/mdx'
 
-import { getPageImage, source } from '@/lib/source'
-import { getPageMarkdownUrl } from '@/lib/source'
+import { appDescription, appName } from '@/lib/constants'
+import { getPageImageUrl } from '@/lib/metadata'
+import { createMetadata } from '@/lib/metadata'
+import { source } from '@/lib/source'
 
 import type { Metadata } from 'next'
 
@@ -21,7 +24,10 @@ export default async function Page(props: PageProps<'/docs/[...slug]'>) {
   const page = source.getPage(params.slug)
   if (!page) notFound()
 
-  const timestamp = page?.data?.lastModified ?? new Date()
+  const { body: MDX, toc, lastModified } = await page.data.load()
+  const timestamp = lastModified ?? new Date()
+  const pageProps = {} satisfies Partial<DocsPageProps>
+  const markdownUrl = `${page?.url ?? 'missing'}.mdx`
 
   const lastModifiedDate = new Date(timestamp).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -29,13 +35,10 @@ export default async function Page(props: PageProps<'/docs/[...slug]'>) {
     day: 'numeric',
   })
 
-  const MDX = page.data.body
-  const markdownUrl = getPageMarkdownUrl(page).url
-
   return (
     <DocsPage
-      toc={page.data.toc}
-      full={page.data.full}
+      toc={toc}
+      {...pageProps}
       // lastUpdate={new Date(page.data.lastModified)}
     >
       <DocsTitle>{page.data.title}</DocsTitle>
@@ -58,22 +61,42 @@ export default async function Page(props: PageProps<'/docs/[...slug]'>) {
   )
 }
 
-export async function generateStaticParams() {
-  return source.generateParams()
-}
-
 export async function generateMetadata(
   props: PageProps<'/docs/[...slug]'>,
 ): Promise<Metadata> {
-  const params = await props.params
-  const page = source.getPage(params.slug)
-  if (!page) notFound()
+  const { slug = [] } = await props.params
+  const page = source.getPage(slug)
 
-  return {
-    title: page.data.title,
-    description: page.data.description,
-    openGraph: {
-      images: getPageImage(page).url,
-    },
+  if (!page) {
+    return createMetadata({
+      title: 'Not found',
+    })
   }
+
+  const {
+    description = appDescription,
+    title = appName,
+  } = page?.data
+
+  const image = {
+    url: getPageImageUrl(page)?.url,
+    width: 1200,
+    height: 630,
+  }
+
+  return createMetadata({
+    title,
+    description,
+    openGraph: {
+      url: `/docs/${page.slugs.join('/')}`,
+      images: [image],
+    },
+    twitter: {
+      images: [image],
+    },
+  })
+}
+
+export async function generateStaticParams() {
+  return source.generateParams()
 }

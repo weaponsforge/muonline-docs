@@ -38,6 +38,6 @@ export const config = {
   // Next.js requires `matcher` to be statically analyzable.
   matcher: [
     '/docs/secrets/:path*',
-    '/llms.mdx/docs/secrets/:path*',
+    '/llms.mdx/secrets/:path*',
   ],
 }
