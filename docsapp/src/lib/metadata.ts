@@ -1,6 +1,6 @@
 import type { Metadata } from 'next/types'
 
-import { appName, baseUrl } from '@/lib/constants'
+import { appName, baseUrl, gitConfig } from '@/lib/constants'
 import { PageExtended } from '@/lib/source'
 
 export function createMetadata(override: Metadata): Metadata {
@@ -16,7 +16,7 @@ export function createMetadata(override: Metadata): Metadata {
     },
     twitter: {
       card: 'summary_large_image',
-      creator: '@weaponsforge',
+      creator: gitConfig.user,
       title: override.title ?? undefined,
       description: override.description ?? undefined,
       images: '/images/banner.png',
