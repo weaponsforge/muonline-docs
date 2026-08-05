@@ -21,7 +21,7 @@ const docsTopics = [
   },
   {
     name: 'Armor Sets',
-    description: 'MU Online armors sets',
+    description: 'MU Online armor sets',
     icon: <Shield className="size-full" />,
     href: '/docs/armor',
   },
