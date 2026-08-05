@@ -3,7 +3,7 @@ import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons'
 
 import { docs } from 'collections/server'
 
-import { docsContentRoute, docsRoute } from '@/lib/constants'
+import { docsLlmsMdxRoute, docsRoute } from '@/lib/constants'
 import { PRIVATE_ROUTES } from '@/lib/shared'
 import { buildCustomSource } from '@/lib/sourceBuilder'
 
@@ -23,11 +23,11 @@ export const publicSource = loader(buildCustomSource({
 })
 
 export function getPageMarkdownUrl(page: (typeof source)['$inferPage']) {
-  const segments = [...page.slugs, 'content.md']
+  const segments = [...page.slugs]
 
   return {
     segments,
-    url: `${docsContentRoute}/${segments.join('/')}`,
+    url: `${docsLlmsMdxRoute}/${segments.join('/')}`,
   }
 }
 
