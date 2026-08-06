@@ -56,3 +56,22 @@ export const cleanSourceRoute = (docsRoute: string) => {
 
   return build
 }
+
+type UrlBuilderParams = {
+  url: string;
+  requestUrl: string;
+  searchParams: Record<string, string>;
+}
+
+/** Builds a new URL with search query parameters */
+export const urlBuilder = (params: UrlBuilderParams) => {
+  const { url, requestUrl, searchParams } = params
+  const newUrl = new URL(url, requestUrl)
+
+  for (const [key, value] of Object.entries(searchParams)) {
+    if (value === undefined) continue
+    newUrl.searchParams.set(key, value)
+  }
+
+  return newUrl
+}

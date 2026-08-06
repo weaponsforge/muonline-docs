@@ -42,7 +42,7 @@
   - **Authorized JavaScript origins**: Add the domain origins of websites you control in which you'll use this Google Oauth
   - **Authorized redirect URIs**: Add the following
      ```text
-     https://<YOUR_DEPLOYED_APP_ROOT_DOMAIN>/api/auth/callback/google
+     https://<YOUR_DEPLOYED_APP_BASE_URL>/api/auth/callback/google
      eg., http://localhost:3000/api/auth/callback/google
           (when working in local development)
      ```

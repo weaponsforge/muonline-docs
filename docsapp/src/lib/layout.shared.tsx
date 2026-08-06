@@ -1,8 +1,8 @@
 import Image from 'next/image'
 
-import SignOutLink from '@/components/auth/LinkSignout'
-
 import { getAuthSession } from '@/lib/session'
+
+import { SignOutLink } from '@/features/auth'
 
 import { appName } from './constants'
 import { gitConfig } from './constants'
@@ -43,7 +43,7 @@ export async function baseOptions(): Promise<BaseLayoutProps> {
       links: [
         {
           type: 'custom',
-          children: <SignOutLink />,
+          children: <SignOutLink session={session} />,
           secondary: true,
         },
       ],

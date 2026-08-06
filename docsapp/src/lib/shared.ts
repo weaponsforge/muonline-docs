@@ -1,4 +1,4 @@
-import { config as privateRoutes } from '@/proxy'
+import { privateRoutes } from './constants'
 
 export const PRIVATE_ROUTES = privateRoutes.matcher.map((item) =>
   item.replace('/:path*', ''),
