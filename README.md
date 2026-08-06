@@ -37,7 +37,7 @@ npm v11.6.1
 - Read the [GOOGLE_OAUTH.md](/docs/GOOGLE_OAUTH.md) for more information in setting up Google OAuth for sign-in.
 - Retrieve the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variable values here.
 - Add the following in your Google Client ID's **Authorized redirect URIs**:
-   - https://<YOUR_DEPLOYED_APP_ROOT_DOMAIN>/api/auth/callback/google<br>
+   - https://<YOUR_DEPLOYED_APP_BASE_URL>/api/auth/callback/google<br>
    - eg., `http://localhost:3000/api/auth/callback/google` (when working in local development)
 
 > [!TIP]
@@ -146,8 +146,8 @@ Create a `.env.local` file from the `.env.example` file.
 | --- | --- |
 | GOOGLE_CLIENT_ID | Google OAuth2 client ID linked with your Google Cloud Platform project. |
 | GOOGLE_CLIENT_SECRET | Google OAuth2 client secret associated with the `GOOGLE_CLIENT_ID` |
-| NEXTAUTH_SECRET | Your nextauth secret (any random string will do) |
-| ROOT_DOMAIN | Your root domain URL, without the `http://` or `https://` protocol. |
+| BETTER_AUTH_SECRET | Your nextauth secret (any random string will do) |
+| BETTER_AUTH_URL | Your root domain URL, beginning with `http://` or `https://` protocol. |
 | ALLOWED_EMAIL_DOMAINS | Allowed Google email domains to sign-in with Google eg., `gmail.com`, `company.com`.<br><quote>Leave it blank or unset if you want to allow sign-in from all **Gmail domains**.</quote> |
 | ALLOWED_EMAILS | Hard-coded list of comma-separated emails allowed to sign-in with Google.<br><quote>Leave it blank or unset if you want to allow sign-in from all **Google accounts**.</quote> |
 | IS_BUILD_DOCKER | If value is `1`, builds the NextJS app for Docker in production using the standalone mode build into the `/docsapp/.next/standalone` and `/docsapp/.next/static` directories. |

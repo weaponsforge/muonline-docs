@@ -16,7 +16,6 @@ import { appDescription, appName } from '@/lib/constants'
 import { getPageImageUrl } from '@/lib/metadata'
 import { createMetadata } from '@/lib/metadata'
 import { source } from '@/lib/source'
-import { getPageMarkdownUrl } from '@/lib/source'
 
 import type { Metadata } from 'next'
 
@@ -28,8 +27,7 @@ export default async function Page(props: PageProps<'/docs/[...slug]'>) {
   const { body: MDX, toc, lastModified } = await page.data.load()
   const timestamp = lastModified ?? new Date()
   const pageProps = {} satisfies Partial<DocsPageProps>
-  // const markdownUrl = `${page?.url ?? 'missing'}.mdx`
-  const markdownUrl = getPageMarkdownUrl(page)?.url
+  const markdownUrl = `${page?.url}.mdx`
 
   const lastModifiedDate = new Date(timestamp).toLocaleDateString('en-US', {
     year: 'numeric',

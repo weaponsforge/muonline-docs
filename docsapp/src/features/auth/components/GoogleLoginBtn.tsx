@@ -1,15 +1,15 @@
 'use client'
 
-import { signIn } from 'next-auth/react'
-
 import { CustomButton } from '@/components/ui/buttons/ButtonCustom'
 
-export function GoogleSignInButton() {
+import { signIn } from '../utils/authClient'
+
+export default function GoogleSignInButton({ callbackURL }: { callbackURL?: string }) {
   return (
     <CustomButton
       title="Sign-in with Google"
       image="/images/icon-google.svg"
-      callback={() => signIn('google', { callbackUrl: '/docs' })}
+      callback={async () => signIn(callbackURL)}
       styles={{
         container:
           'flex items-center gap-2 rounded-lg border p-3 text-sm cursor-pointer w-50',

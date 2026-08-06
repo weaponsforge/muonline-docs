@@ -14,6 +14,14 @@ export const gitConfig = {
 }
 
 export const baseUrl =
-  process.env.NODE_ENV === 'development' || !process.env.BASE_URL
+  process.env.NODE_ENV === 'development' || !process.env.BETTER_AUTH_URL
     ? new URL('http://localhost:3000')
-    : new URL(`https://${process.env.ROOT_DOMAIN}`)
+    : new URL(`${process.env.BETTER_AUTH_URL}`)
+
+export const privateRoutes = {
+  matcher: [
+    '/docs/secrets.mdx', // Add here if its actually index.mdx
+    '/docs/secrets/:path*',
+    '/llms.mdx/secrets/:path*',
+  ],
+}

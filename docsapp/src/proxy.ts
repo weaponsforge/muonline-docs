@@ -1,43 +1,84 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 import { isMarkdownPreferred, rewritePath } from 'fumadocs-core/negotiation'
-import { type NextRequestWithAuth, withAuth } from 'next-auth/middleware'
 
-import { docsLlmsMdxRoute, docsRoute } from '@/lib/constants'
+import { getAuthSession, isActiveUserAllowed } from '@/lib/session'
+import { PRIVATE_ROUTES } from '@/lib/shared'
 
-const docSource = `${docsRoute}{/*path}`
-const docTarget = `${docsLlmsMdxRoute}{/*path}/content.md`
-const mdxSource = `${docsRoute}{/*path}.mdx`
+import { AUTH_CODE, AUTH_QUERY } from '@/features/auth'
 
-const { rewrite: rewriteDocs } = rewritePath(docSource, docTarget)
-const { rewrite: rewriteSuffix } = rewritePath(mdxSource, docTarget)
+import { AUTH_ERROR, AUTH_ROUTES } from './features/auth/utils/constants'
+import { urlBuilder } from './lib/utils'
 
-export default function proxy(req: NextRequestWithAuth) {
-  const result = rewriteSuffix(req.nextUrl.pathname)
+const { rewrite: rewriteLLM } = rewritePath('/docs/*path', '/llms.mdx/*path')
+const { rewrite: rewriteMdx } = rewritePath('/docs{/*path}.mdx', '/llms.mdx{/*path}')
 
-  if (result) {
-    return withAuth(
-      NextResponse.rewrite(new URL(result, req.nextUrl)) as unknown as NextRequestWithAuth,
-    )
-  }
+export default async function proxy(request: NextRequest) {
+  const pathName = request.nextUrl.pathname
 
-  if (isMarkdownPreferred(req)) {
-    const result = rewriteDocs(req.nextUrl.pathname)
+  const isPrivateRoute = PRIVATE_ROUTES.some(
+    prefix =>
+      pathName === prefix ||
+      pathName.startsWith(`${prefix}/`))
 
-    if (result) {
-      return withAuth(
-        NextResponse.rewrite(new URL(result, req.nextUrl)) as unknown as NextRequestWithAuth,
-      )
+  // Private routes
+  if (isPrivateRoute) {
+    const session = await getAuthSession()
+    const isAllowed = isActiveUserAllowed(session)
+
+    // Redirect to login
+    if (!session) {
+      const signInUrl = urlBuilder({
+        url: AUTH_ROUTES.SIGNIN,
+        requestUrl: request.url,
+        searchParams: {
+          [AUTH_QUERY.CODE]: AUTH_CODE.SIGN_IN,
+          [AUTH_QUERY.CALLBACK_URL]: request.nextUrl.pathname + request.nextUrl.search,
+        },
+      })
+
+      return NextResponse.redirect(signInUrl)
+    }
+
+    // Redirect to AccessDenied with login
+    if (!isAllowed) {
+      const forbiddenUrl = urlBuilder({
+        url: AUTH_ROUTES.ACCESS_DENIED,
+        requestUrl: request.url,
+        searchParams: {
+          [AUTH_QUERY.CODE]: AUTH_CODE.ERROR,
+          [AUTH_QUERY.ERROR]: AUTH_ERROR.ACCESS_DENIED,
+          [AUTH_QUERY.CALLBACK_URL]: request.nextUrl.pathname + request.nextUrl.search,
+        },
+      })
+
+      return NextResponse.redirect(forbiddenUrl)
     }
   }
 
-  return withAuth(req)
+  // Process txt, mdx URL rewrites
+  const result = rewriteMdx(request.nextUrl.pathname)
+
+  if (result) {
+    return NextResponse.rewrite(new URL(result, request.nextUrl))
+  }
+
+  if (isMarkdownPreferred(request)) {
+    const result = rewriteLLM(request.nextUrl.pathname)
+
+    if (result) {
+      return NextResponse.rewrite(new URL(result, request.nextUrl), {
+        // this URL has two representations, selected by `Accept`
+        headers: { Vary: 'Accept' },
+      })
+    }
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {
-  // Next.js requires `matcher` to be statically analyzable.
-  matcher: [
-    '/docs/secrets/:path*',
-    '/llms.mdx/secrets/:path*',
+  matcher:[
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|bmp|avif|svg|ico|css|js|webp)).*)',
   ],
 }

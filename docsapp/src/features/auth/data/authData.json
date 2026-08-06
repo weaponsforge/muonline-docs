@@ -1,0 +1,17 @@
+[
+  {
+    "code": "defaultValue",
+    "title": "Error",
+    "info": "Unknown Error"
+  },
+  {
+    "code": "AccessDenied",
+    "title": "Access Denied",
+    "info": "You do not have permission<br>to sign in."
+  },
+  {
+    "code": "signin",
+    "title": "Sign In",
+    "info": "Log-in to your account"
+  }
+]
