@@ -239,6 +239,7 @@ Should NOT handle:
 - middleware logic
 
 ### `/api/auth/[...all]/route.ts`
+
 Responsibility:
 - Expose Better Auth API routes
 - Convert authentication errors into application redirects
@@ -248,6 +249,7 @@ Should NOT handle:
 - route protection
 
 ### `proxy.ts`
+
 Responsibility:
 - Protect private routes
 - Redirect unauthenticated users
@@ -256,8 +258,9 @@ Responsibility:
 Should NOT handle:
 - OAuth callbacks
 - Google profile validation
----
-## Security Model
+
+## 🟢 Security Model
+
 The application uses multiple authorization layers, each layer has a specific responsibility.
 ```text
                  Google OAuth
@@ -317,6 +320,7 @@ Authenticate ⟶ Create Session ⟶ Check Authorization ⟶ Logout
 ```
 
 ### Why keep authorization checks in proxy.ts?
+
 Even though OAuth validation already exists, `proxy.ts`:
 - protects future changes
 - prevents accidental bypasses
@@ -324,12 +328,16 @@ Even though OAuth validation already exists, `proxy.ts`:
 
 ### Why one shared `isEmailAllowed()` instead of two separate checks?
 `auth.ts` and `session.ts` previously implemented the allowlist independently, which let their empty-list ("no restriction set") behavior silently diverge. A single shared function, called from both layers, guarantees they can't drift out of sync again.
----
-## Developer Checklist
+
+
+## 🟢 Developer Checklist
+
 When modifying authentication:
-- [ ] Update auth.ts for identity/provider changes
-- [ ] Update isEmailAllowed() in lib/utils.ts for allowlist rules
-- [ ] Update route.ts for auth error handling
-- [ ] Update proxy.ts for protected routes
+
+- [ ] Update `auth.ts` for identity/provider changes
+- [ ] Update `isEmailAllowed()` in `lib/utils.ts` - `ALLOWED_EMAILS` .env variable for allowlist rules
+- [ ] Update `route.ts` for auth error handling
+- [ ] Update `proxy.ts` for protected routes
+- [ ] Update `lib/constants.ts` -> `privateRoutes` with new private/protected routes
 - [ ] Keep public routes accessible
 - [ ] Never expose protected pages only through client-side checks
