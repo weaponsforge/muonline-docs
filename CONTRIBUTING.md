@@ -43,6 +43,12 @@ To ensure a smooth contribution process for everyone, please follow these guidel
    - If you're adding new React components or utilities, ensure intuitive file, variables, and TypeScript naming conventions. Furthermore, ensure React best practices to continue promoting well-structured, optimized and easy-to-follow React components.
    - Before commiting your changes, format your code with `"npm run lint:fix"`, and ensure all updates pass the `"npm run lint"` and `"npm run types:check"` scripts.
 
+      > 🔔 **INFO**<br>
+      > Additional documentation is available in the project's root directory:<br>
+      > - [README.md](/README.md) - Project overview and setup instructions.<br>
+      > - [AUTHENTICATION.md](/docs/AUTHENTICATION.md) - Notes on the authentication architecture and how to extend the authentication mechanism.
+      > - [GOOGLE_OAUTH.md](/docs/GOOGLE_OAUTH.md) - Instructions for creating and configuring Google OAuth credentials.
+
 3. **Commit Your Changes:** After making your changes, commit them to your branch. Use clear and concise commit messages to describe your updates.
    ```sh
    git add .
