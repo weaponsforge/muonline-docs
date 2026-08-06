@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { isMarkdownPreferred, rewritePath } from 'fumadocs-core/negotiation'
 
-import { getAuthSession, isUserAllowed } from '@/lib/session'
+import { getAuthSession, isActiveUserAllowed } from '@/lib/session'
 import { PRIVATE_ROUTES } from '@/lib/shared'
 
 import { AUTH_CODE, AUTH_QUERY } from '@/features/auth'
@@ -24,7 +24,7 @@ export default async function proxy(request: NextRequest) {
   // Private routes
   if (isPrivateRoute) {
     const session = await getAuthSession()
-    const isAllowed = isUserAllowed(session)
+    const isAllowed = isActiveUserAllowed(session)
 
     // Redirect to login
     if (!session) {

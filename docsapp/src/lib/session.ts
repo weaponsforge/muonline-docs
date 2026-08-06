@@ -1,7 +1,7 @@
 import { headers } from 'next/headers'
 
 import { auth } from '@/lib/auth'
-import { getAllowedEmails, getMultipleHostedDomains } from '@/lib/utils'
+import { isEmailAllowed } from '@/lib/utils'
 
 export type Session = Awaited<ReturnType<typeof getAuthSession>>
 
@@ -15,32 +15,13 @@ export const getAuthSession = async () => {
 }
 
 /**
- * Checks if a user email in the session is allowed to sign-in
+ * Checks if the current active user in the session has an
+ * email that's allowed to sign-in or access routes
  * @param session
  * @returns {boolean}
  */
-export const isUserAllowed = (session: Session) => {
+export const isActiveUserAllowed = (session: Session) => {
   if (!session) return false
-  const email = session.user.email.toLowerCase().trim()
 
-  if (!email || !email.includes('@')) {
-    return false
-  }
-
-  const allowedDomains = getMultipleHostedDomains()
-  const allowedEmails = getAllowedEmails()
-  const domain = email.split('@')[1]
-
-  const isAllowedDomain =
-    allowedDomains.length === 0
-      ? true // If no domains specified, allow all domains
-      : allowedDomains.includes(domain)
-
-  // Check email restriction (if ALLOWED_EMAILS is set)
-  const isAllowedEmail =
-      allowedEmails.length === 0
-        ? true // If no emails specified, allow all emails
-        : allowedEmails.includes(email)
-
-  return isAllowedDomain && isAllowedEmail
+  return isEmailAllowed(session.user.email)
 }

@@ -1,13 +1,11 @@
 import { betterAuth } from 'better-auth'
 import { APIError } from 'better-auth/api'
 
-import { getHostedDomain } from '@/lib/utils'
-import { getAllowedEmails } from '@/lib/utils'
+import { getHostedDomain, isEmailAllowed } from '@/lib/utils'
 
 import { AUTH_ERROR, B_STATUS_CODES, GOOGLEAPIS_USERINFO_URL } from '@/features/auth'
 
 const singleHostedDomain = getHostedDomain()
-const allowedEmails = getAllowedEmails()
 
 // Better Auth settings
 export const auth = betterAuth({
@@ -31,7 +29,7 @@ export const auth = betterAuth({
 
         const profile = await response.json()
 
-        if (!allowedEmails.includes(profile.email)) {
+        if (!isEmailAllowed(profile.email)) {
           throw new APIError(B_STATUS_CODES.FORBIDDEN, {
             message: AUTH_ERROR.ACCESS_DENIED,
           })

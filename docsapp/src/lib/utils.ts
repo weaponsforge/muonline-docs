@@ -75,3 +75,34 @@ export const urlBuilder = (params: UrlBuilderParams) => {
 
   return newUrl
 }
+
+/**
+ * Checks if an email is allowed: it exists in the whitelist
+ * and it came from a supported email domain
+ * @param rawEmail - email
+ * @returns {boolean}
+ */
+export const isEmailAllowed = (rawEmail: string) => {
+  const email = rawEmail?.toLowerCase().trim()
+
+  if (!email || !email.includes('@')) {
+    return false
+  }
+
+  const allowedDomains = getMultipleHostedDomains()
+  const allowedEmails = getAllowedEmails()
+  const domain = email.split('@')[1]
+
+  const isAllowedDomain =
+    allowedDomains.length === 0
+      ? true // If no domains specified, allow all domains
+      : allowedDomains.includes(domain)
+
+  // Check email restriction (if ALLOWED_EMAILS is set)
+  const isAllowedEmail =
+      allowedEmails.length === 0
+        ? true // If no emails specified, allow all emails
+        : allowedEmails.includes(email)
+
+  return isAllowedDomain && isAllowedEmail
+}
