@@ -14,9 +14,9 @@ export const gitConfig = {
 }
 
 export const baseUrl =
-  process.env.NODE_ENV === 'development' || !process.env.BASE_URL
+  process.env.NODE_ENV === 'development' || !process.env.BETTER_AUTH_URL
     ? new URL('http://localhost:3000')
-    : new URL(`${process.env.BASE_URL}`)
+    : new URL(`${process.env.BETTER_AUTH_URL}`)
 
 export const privateRoutes = {
   matcher: [
