@@ -20,6 +20,7 @@ export const baseUrl =
 
 export const privateRoutes = {
   matcher: [
+    '/docs/secrets.mdx',    // Add here if its actually index.mdx
     '/docs/secrets/:path*',
     '/llms.mdx/secrets/:path*',
   ],

@@ -16,8 +16,8 @@ export const useAuthError = () => {
 
   const queryCode = searchParams.get(AUTH_QUERY.CODE) ?? '-'
   const queryError = searchParams.get(AUTH_QUERY.ERROR) ?? '-'
-
   const queryCallbackURL = searchParams.get(AUTH_QUERY.CALLBACK_URL) ?? '/'
+
   let message
 
   const messages = errorData.reduce((acc, item) => {
