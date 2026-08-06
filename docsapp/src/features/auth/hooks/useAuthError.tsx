@@ -11,6 +11,16 @@ type ErrDataType = Record<string, {
   info: string;
 }>
 
+const messages = errorData.reduce((acc, item) => {
+  acc[item.code] = {
+    code: item.code,
+    title: item.title,
+    info: item.info,
+  }
+
+  return acc
+}, {} as ErrDataType)
+
 export const useAuthError = () => {
   const searchParams = useSearchParams()
 
@@ -19,16 +29,6 @@ export const useAuthError = () => {
   const queryCallbackURL = searchParams.get(AUTH_QUERY.CALLBACK_URL) ?? '/'
 
   let message
-
-  const messages = errorData.reduce((acc, item) => {
-    acc[item.code] = {
-      code: item.code,
-      title: item.title,
-      info: item.info,
-    }
-
-    return acc
-  }, {} as ErrDataType)
 
   switch (queryCode) {
   case AUTH_CODE.SIGN_IN:
@@ -43,6 +43,6 @@ export const useAuthError = () => {
   return {
     errorCode: message?.title ?? '-',
     errorInfo: message?.info ?? '-',
-    callbackURL: queryCallbackURL ?? '/',
+    callbackURL: queryCallbackURL
   }
 }
