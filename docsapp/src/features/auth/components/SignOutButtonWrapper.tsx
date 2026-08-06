@@ -1,6 +1,6 @@
 import { Session } from '@/lib/session'
 
-import SignOutButton from './BtnSignout'
+import SignOutButton from './SignOutButton'
 
 export default async function SignOutLink({ session }: { session: Session }) {
   if (!session) {

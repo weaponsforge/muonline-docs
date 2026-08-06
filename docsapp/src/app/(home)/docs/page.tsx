@@ -23,13 +23,13 @@ const docsTopics = [
     name: 'Armor Sets',
     description: 'MU Online armor sets',
     icon: <Shield className="size-full" />,
-    href: '/docs/armor',
+    href: '/docs/characters',
   },
   {
     name: 'Maps',
     description: 'MU Online maps',
     icon: <MapPinPlus className="size-full" />,
-    href: '/docs/maps',
+    href: '/docs/characters',
   },
   {
     name: 'Secrets',

@@ -1,7 +1,7 @@
 import AuthWidget from './components/AuthWidget'
-import SignOutButton from './components/BtnSignout'
+import SignOutButton from './components/SignOutButton'
 import GoogleSignInButton from './components/GoogleLoginBtn'
-import SignOutLink from './components/LinkSignout'
+import SignOutLink from './components/SignOutButtonWrapper'
 import { signIn, signOut } from './utils/authClient'
 import {
   AUTH_CODE,
