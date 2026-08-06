@@ -3,10 +3,10 @@ import { NextResponse } from 'next/server'
 import { isMarkdownPreferred, rewritePath } from 'fumadocs-core/negotiation'
 import { type NextRequestWithAuth, withAuth } from 'next-auth/middleware'
 
-import { docsContentRoute, docsRoute } from '@/lib/constants'
+import { docsLlmsMdxRoute, docsRoute } from '@/lib/constants'
 
 const docSource = `${docsRoute}{/*path}`
-const docTarget = `${docsContentRoute}{/*path}/content.md`
+const docTarget = `${docsLlmsMdxRoute}{/*path}/content.md`
 const mdxSource = `${docsRoute}{/*path}.mdx`
 
 const { rewrite: rewriteDocs } = rewritePath(docSource, docTarget)
@@ -38,6 +38,6 @@ export const config = {
   // Next.js requires `matcher` to be statically analyzable.
   matcher: [
     '/docs/secrets/:path*',
-    '/llms.mdx/docs/secrets/:path*',
+    '/llms.mdx/secrets/:path*',
   ],
 }
