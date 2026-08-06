@@ -43,6 +43,6 @@ export const useAuthError = () => {
   return {
     errorCode: message?.title ?? '-',
     errorInfo: message?.info ?? '-',
-    callbackURL: queryCallbackURL
+    callbackURL: queryCallbackURL,
   }
 }
