@@ -2,16 +2,26 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { isMarkdownPreferred, rewritePath } from 'fumadocs-core/negotiation'
 
+import { GOOGLE_AUTH_CONFIGURED } from '@/lib/constants'
 import { getAuthSession, isActiveUserAllowed } from '@/lib/session'
 import { PRIVATE_ROUTES } from '@/lib/shared'
+import { urlBuilder } from '@/lib/utils'
 
-import { AUTH_CODE, AUTH_QUERY } from '@/features/auth'
-
-import { AUTH_ERROR, AUTH_ROUTES } from './features/auth/utils/constants'
-import { urlBuilder } from './lib/utils'
+import {
+  AUTH_CODE,
+  AUTH_ERROR,
+  AUTH_QUERY,
+  AUTH_ROUTES,
+} from '@/features/auth'
 
 const { rewrite: rewriteLLM } = rewritePath('/docs/*path', '/llms.mdx/*path')
 const { rewrite: rewriteMdx } = rewritePath('/docs{/*path}.mdx', '/llms.mdx{/*path}')
+
+if (!GOOGLE_AUTH_CONFIGURED) {
+  console.warn(
+    '[AUTH] Google OAuth credentials not set — all private routes are running in open-access mode.',
+  )
+}
 
 export default async function proxy(request: NextRequest) {
   const pathName = request.nextUrl.pathname
@@ -22,9 +32,8 @@ export default async function proxy(request: NextRequest) {
       pathName.startsWith(`${prefix}/`))
 
   // Private routes
-  if (isPrivateRoute) {
+  if (isPrivateRoute && GOOGLE_AUTH_CONFIGURED) {
     const session = await getAuthSession()
-    const isAllowed = isActiveUserAllowed(session)
 
     // Redirect to login
     if (!session) {
@@ -41,6 +50,8 @@ export default async function proxy(request: NextRequest) {
     }
 
     // Redirect to AccessDenied with login
+    const isAllowed = isActiveUserAllowed(session)
+
     if (!isAllowed) {
       const forbiddenUrl = urlBuilder({
         url: AUTH_ROUTES.ACCESS_DENIED,
