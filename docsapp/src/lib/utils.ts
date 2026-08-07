@@ -4,10 +4,7 @@
  * @returns {string|undefined} email domain
  */
 export const getHostedDomain = (): string | undefined => {
-  const allowedDomains = (process.env.ALLOWED_EMAIL_DOMAINS || '')
-    .split(',')
-    .map((d) => d.trim().toLowerCase())
-    .filter(Boolean)
+  const allowedDomains = getMultipleHostedDomains()
 
   return allowedDomains.length === 1 ? allowedDomains[0] : undefined
 }
@@ -105,4 +102,13 @@ export const isEmailAllowed = (rawEmail: string) => {
         : allowedEmails.includes(email)
 
   return isAllowedDomain && isAllowedEmail
+}
+
+/**
+ * Checks if Google OAuth is configured with the existence of
+ * environment variables
+ */
+export const isGoogleOauthSet = (): boolean => {
+  return Boolean(process.env.GOOGLE_CLIENT_ID) &&
+    Boolean(process.env.GOOGLE_CLIENT_SECRET)
 }

@@ -3,6 +3,7 @@ import { join } from 'node:path'
 
 import { NextResponse } from 'next/server'
 
+import { GOOGLE_AUTH_CONFIGURED } from '@/lib/constants'
 import { getAuthSession } from '@/lib/session'
 
 /**
@@ -18,7 +19,7 @@ export async function GET(_: Request, context?: any) {
   const PROTECTED_FILE_PATH = 'protected'
   let filePathArray = ['images', 'default.png']
 
-  if (!session) {
+  if (!session && GOOGLE_AUTH_CONFIGURED) {
     return new NextResponse('Unauthorized', { status: 401 })
   }
 
