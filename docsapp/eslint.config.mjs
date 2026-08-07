@@ -31,7 +31,7 @@ const eslintConfig = defineConfig([
       'object-curly-spacing': ['error', 'always'],
       'quotes': ['error', 'single'],
       'semi': ['error', 'never'],
-      'no-console': ['error', { allow: ['error'] }],
+      'no-console': ['error', { allow: ['error', 'warn'] }],
       'no-multi-spaces': 'error',
       'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1, maxBOF: 0 }],
       'no-trailing-spaces': 'error',

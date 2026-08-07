@@ -282,7 +282,7 @@ The application uses multiple authorization layers, each layer has a specific re
 
 ### A. Adding more allowed users
 
-Update the allowlist source: `isEmailAllowed()` in `/lib/utils.ts`, which reads `getAllowedEmails()` (`ALLOWED_EMAILS` env var) and `getMultipleHostedDomains()` (`ALLOWED_DOMAINS` env var). An empty list on either check allows all — set explicitly to restrict.
+Update the allowlist source: `isEmailAllowed()` in `/lib/utils.ts`, which reads `getAllowedEmails()` (`ALLOWED_EMAILS` env var) and `getMultipleHostedDomains()` (`ALLOWED_EMAIL_DOMAINS` env var). An empty list on either check allows all — set explicitly to restrict.
 
 Potential expansions could use:
 - database table
